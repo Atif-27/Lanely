@@ -4,7 +4,7 @@ import com.Transporter.FreightFox.dto.request.AssignmentRequest;
 import com.Transporter.FreightFox.dto.request.InputDataRequest;
 import com.Transporter.FreightFox.dto.request.LaneQuoteRequest;
 import com.Transporter.FreightFox.dto.request.TransporterRequest;
-import com.Transporter.FreightFox.dto.response.ApiResponse;
+import com.Transporter.FreightFox.dto.response.StatusResponse;
 import com.Transporter.FreightFox.dto.response.AssignmentResponse;
 import com.Transporter.FreightFox.entity.Lane;
 import com.Transporter.FreightFox.entity.LaneQuote;
@@ -57,7 +57,7 @@ public class TransporterServiceImpl implements TransporterService {
     }
 
     @Override
-    public ApiResponse saveInput(InputDataRequest request) {
+    public StatusResponse saveInput(InputDataRequest request) {
         inputDataValidator.validate(request);
 
         Lock lock = dataLock.writeLock();
@@ -68,7 +68,7 @@ public class TransporterServiceImpl implements TransporterService {
             lock.unlock();
         }
 
-        return new ApiResponse("success", "Input data saved successfully.");
+        return new StatusResponse("success", "Input data saved successfully.");
     }
 
     @Override

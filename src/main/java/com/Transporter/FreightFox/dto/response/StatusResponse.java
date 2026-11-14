@@ -1,6 +1,6 @@
 package com.Transporter.FreightFox.dto.response;
 
-public record ApiResponse(
+public record StatusResponse(
         String status,
         String message
 ) {
