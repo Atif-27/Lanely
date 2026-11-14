@@ -33,6 +33,11 @@ public class GlobalExceptionHandler {
         return error(HttpStatus.BAD_REQUEST, "Malformed request body.");
     }
 
+    @ExceptionHandler(InfeasibleAssignmentException.class)
+    public ResponseEntity<ApiResponse> handleInfeasible(InfeasibleAssignmentException ex) {
+        return error(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage());
+    }
+
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<ApiResponse> handleDataNotFound(DataNotFoundException ex) {
         return error(HttpStatus.NOT_FOUND, ex.getMessage());
