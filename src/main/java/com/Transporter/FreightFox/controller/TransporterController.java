@@ -5,6 +5,7 @@ import com.Transporter.FreightFox.dto.request.InputDataRequest;
 import com.Transporter.FreightFox.dto.response.ApiResponse;
 import com.Transporter.FreightFox.dto.response.AssignmentResponse;
 import com.Transporter.FreightFox.service.TransporterService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,12 +21,12 @@ public class TransporterController {
     private final TransporterService transporterService;
 
     @PostMapping("/input")
-    public ResponseEntity<ApiResponse> submitInput(@RequestBody InputDataRequest request) {
+    public ResponseEntity<ApiResponse> submitInput(@Valid @RequestBody InputDataRequest request) {
         return ResponseEntity.ok(transporterService.saveInput(request));
     }
 
     @PostMapping("/assignment")
-    public ResponseEntity<AssignmentResponse> getAssignment(@RequestBody AssignmentRequest request) {
+    public ResponseEntity<AssignmentResponse> getAssignment(@Valid @RequestBody AssignmentRequest request) {
         return ResponseEntity.ok(transporterService.getAssignment(request));
     }
 }
