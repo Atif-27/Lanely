@@ -45,7 +45,34 @@ Every error uses the same shape, `{"status": "error", "message": "..."}`:
 | 404 | An assignment is requested before any input was submitted |
 | 422 | The lanes cannot all be covered within the limit (the message gives the minimum number needed) |
 
+## Request flow
+
+```mermaid
+flowchart LR
+    C([Client]) -->|"POST /input"| V["Validation<br/>field + cross-field"]
+    V --> W["Service<br/>write lock"]
+    W -->|"replace all data"| DB[("H2 in-memory")]
+    C -->|"POST /assignment"| R["Service<br/>read lock"]
+    R -->|"load lanes + quotes"| DB
+    R --> O["Optimizer"]
+    O -->|"best plan or 422"| C
+```
+
 ## How the optimizer works
+
+```mermaid
+flowchart TD
+    A["Lanes + quotes"] --> B{"Any lane with<br/>no quote at all?"}
+    B -->|Yes| X1["422: list those lanes"]
+    B -->|No| C["Try every set of 1 to<br/>maxTransporters transporters"]
+    C --> D["Each lane goes to the<br/>cheapest quote in the set"]
+    D --> E{"Every lane<br/>covered?"}
+    E -->|No| C
+    E -->|Yes| F["Keep if better:<br/>1. lower cost<br/>2. more transporters used<br/>3. lower ids"]
+    F --> G{"Found any<br/>valid plan?"}
+    G -->|Yes| H["Return best plan"]
+    G -->|No| X2["Retry with a bigger limit<br/>422: minimum needed"]
+```
 
 1. Every combination of transporters from size 1 up to `maxTransporters` is tried.
 2. For a combination, each lane goes to the cheapest quote within it. A combination that leaves any lane unquoted is skipped.
