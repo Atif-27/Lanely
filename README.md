@@ -2,7 +2,7 @@
 
 A Spring Boot service that assigns transporters to lanes so that every lane is covered at the lowest total cost, using at most a given number of transporters.
 
-- **Live URL:** _add after deployment_
+- **Live URL:**  https://lanely.onrender.com
 - **Swagger UI:** `<live-url>/swagger-ui.html` (the root URL redirects there)
 
 ## Tech stack
